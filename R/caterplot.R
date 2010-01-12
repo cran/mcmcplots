@@ -1,4 +1,4 @@
-caterplot <- function (mcmcout, parms=NULL, regex=NULL, random=NULL, quantiles=list(), collapse=TRUE, denstrip = FALSE, add = FALSE, labels=NULL, labels.loc="axis", cex.labels=NULL, horizontal=TRUE, val.lim=NULL, lab.lim=NULL, lwd=c(1, 2), pch=3, width=NULL, col=mcmcplotsPalette(nchains), style=c("gray", "plain"), ...){
+caterplot <- function (mcmcout, parms=NULL, regex=NULL, random=NULL, leaf.marker="[\\[_]", quantiles=list(), collapse=TRUE, denstrip = FALSE, add = FALSE, labels=NULL, labels.loc="axis", las = NULL, cex.labels=NULL, greek = FALSE, horizontal=TRUE, val.lim=NULL, lab.lim=NULL, lwd=c(1, 2), pch=16, eps=0.1, width=NULL, col=NULL, style=c("gray", "plain"), ...){
 
     ## Utility functions ##
     is.odd <- function(x) return(x %% 2 != 0)
@@ -17,26 +17,36 @@ caterplot <- function (mcmcout, parms=NULL, regex=NULL, random=NULL, quantiles=l
     style <- match.arg(style)
 
     ## Convert to MCMC list object
-    if (!(is.mcmc(mcmcout)|is.mcmc.list(mcmcout)))
-        mcmcout <- as.mcmc(mcmcout)
-    if (!is.mcmc.list(mcmcout))
-        mcmcout <- mcmc.list(mcmcout)
-    if (collapse)
-        mcmcout <- as.mcmc.list(as.mcmc(as.matrix(mcmcout)))
-    nchains <- length(mcmcout)
+    ## if (!(is.mcmc(mcmcout)|is.mcmc.list(mcmcout)))
+    ##     mcmcout <- as.mcmc(mcmcout)
+    ## if (!is.mcmc.list(mcmcout))
+    ##     mcmcout <- mcmc.list(mcmcout)
+    mcmcout <- convert.mcmc.list(mcmcout)
 
-    parnames <- parms2plot(varnames(mcmcout), parms, regex, random)
+    if (is.null(varnames(mcmcout))){
+        warning("Argument 'mcmcout' did not have valid variable names, so names have been created for you.")
+        varnames(mcmcout) <- varnames(mcmcout, allow.null=FALSE)
+    }
+    parnames <- parms2plot(varnames(mcmcout), parms, regex, random, leaf.marker)
     if (length(parnames)==0)
         stop("No parameters matched arguments 'parms' or 'regex'.")
     mcmcout <- mcmcout[, parnames, drop=FALSE]
     np <- length(parnames)
+
+    if (collapse)
+        mcmcout <- as.mcmc.list(as.mcmc(as.matrix(mcmcout)))
+    nchains <- length(mcmcout)
+
+    if (is.null(col)){
+        col <- mcmcplotsPalette(nchains)
+    }
+    col <- rep(col, length.out=nchains)
 
     ## Calculate points and lines to plot and medians for line plots
     q <- list(outer=c(0.025, 0.975), inner=c(0.16, 0.84))
     q[names(quantiles)] <- quantiles
     qout <- lapply(mcmcout, function(mat) apply(mat, 2, quantile, probs=q$outer))
     qin  <- lapply(mcmcout, function(mat) apply(mat, 2, quantile, probs=q$inner))
-    mn   <- lapply(mcmcout, colMeans)
     med  <- lapply(mcmcout, function(mat) apply(mat, 2, median))
     dens <- lapply(mcmcout, function(mat) apply(mat, 2, density))
     densx <- lapply(dens, function(dl) lapply(dl, function(x) x$x))
@@ -63,7 +73,8 @@ caterplot <- function (mcmcout, parms=NULL, regex=NULL, random=NULL, quantiles=l
         yaxt <- "n"
 
         axis.side <- 2
-        las <- 1
+
+        if (is.null(las)) las <- 1
 
         vv <- rev(seq(np))
     }
@@ -83,7 +94,7 @@ caterplot <- function (mcmcout, parms=NULL, regex=NULL, random=NULL, quantiles=l
         yaxt <- NULL
 
         axis.side <- 1
-        las <- 2
+        if (is.null(las)) las <- 2
 
         vv <- seq(np)
     }
@@ -111,19 +122,19 @@ caterplot <- function (mcmcout, parms=NULL, regex=NULL, random=NULL, quantiles=l
         if (denstrip){
             if (is.null(width)){
                 if (nchains>1){
-                    width <- ifelse(is.odd(nchains), -get.offset(2, nchains), -2*get.offset(1, nchains))
+                    width <- ifelse(is.odd(nchains), -get.offset(2, nchains, eps=eps), -2*get.offset(1, nchains, eps=eps))
                 } else {
                     width <- diff(par("usr")[3:4])/30
                 }
             }
             for (i in seq(nchains)){
-                vvoff <- vv + get.offset(i, nchains)
+                vvoff <- vv + get.offset(i, nchains, eps=eps)
                 invisible(mapply(function(d, a) denstrip(x=d$x, dens=d$y, at=a, width=width, colmin=colmin, colmax=col[i]), dens[[i]], vvoff))
                 points(med[[i]], vvoff, pch=pch, col=col[i])
             }
         } else {
             for (i in seq(nchains)){
-                vvoff <- vv + get.offset(i, nchains)
+                vvoff <- vv + get.offset(i, nchains, eps=eps)
                 matlines(qout[[i]], rbind(vvoff, vvoff), col=col[i], lwd=lwd[1], lty=1)
                 matlines(qin[[i]], rbind(vvoff, vvoff), col=col[i], lwd=lwd[2], lty=1)
                 points(med[[i]], vvoff, pch=pch, col=col[i])
@@ -133,17 +144,17 @@ caterplot <- function (mcmcout, parms=NULL, regex=NULL, random=NULL, quantiles=l
     else{
         if (denstrip){
             if (is.null(width)){
-                if (nchains>1) width <- ifelse(is.odd(nchains), -get.offset(2, nchains), -2*get.offset(1, nchains))
+                if (nchains>1) width <- ifelse(is.odd(nchains), -get.offset(2, nchains, eps=eps), -2*get.offset(1, nchains, eps=eps))
                 else width <- diff(par("usr")[1:2])/30
             }
             for (i in seq(nchains)){
-                vvoff <- vv + get.offset(i, nchains)
+                vvoff <- vv + get.offset(i, nchains, eps=eps)
                 invisible(mapply(function(d, a) denstrip(x=d$x, dens=d$y, at=a, horiz=FALSE, width=width, colmin=colmin, colmax=col[i]), dens[[i]], vvoff))
                 points(vvoff, med[[i]], pch=pch, col=col[i])
             }
         } else {
             for (i in seq(nchains)){
-                vvoff <- vv + get.offset(i, nchains)
+                vvoff <- vv + get.offset(i, nchains, eps=eps)
                 matlines(rbind(vvoff, vvoff), qout[[i]], col=col[i], lwd=lwd[1], lty=1)
                 matlines(rbind(vvoff, vvoff), qin[[i]], col=col[i], lwd=lwd[2], lty=1)
                 points(vvoff, med[[i]], pch=pch, col=col[i])
@@ -152,6 +163,9 @@ caterplot <- function (mcmcout, parms=NULL, regex=NULL, random=NULL, quantiles=l
     }
     if (is.null(labels))
         labels <- parnames
+    if (greek) {
+      labels <- .to.greek(labels)
+    }
     if (is.null(cex.labels))
         cex.labels <- 1/(log(np)/5 + 1)
     if (labels.loc=="axis")

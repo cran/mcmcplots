@@ -1,7 +1,10 @@
-corplot <- function(mat, col=mcmcplotsPalette(11, TRUE), outline=TRUE, legend.scale=0.75, mar=c(5, 4, 1, 1) + 0.1, ...){
+corplot <- function(mat, col=mcmcplotsPalette(11, "sequential"), outline=TRUE, greek = FALSE, legend.scale=0.75, mar=c(5, 4, 1, 1) + 0.1, ...){
     opar <- par(mar=mar)
     on.exit(par(opar))
-    nm <- dimnames(mat)[[1]]
+    labels <- dimnames(mat)[[2]]
+    if (greek) {
+      labels <- .to.greek(labels)
+    }
     p <- nrow(mat)
     mat[lower.tri(mat, diag=TRUE)] <- NA
     mat <- abs(mat[, p:1])
@@ -10,8 +13,8 @@ corplot <- function(mat, col=mcmcplotsPalette(11, TRUE), outline=TRUE, legend.sc
     ## y <- com[1]
     ## z <- mat[lower.tri(mat)]
     image(mat, axes=FALSE, col=col)
-    axis(2, at=0:(p-1)/(p-1), label=c(rev(nm[-1]), NA), las=2, tick=FALSE, ...)
-    axis(1, at=0:(p-1)/(p-1), label=c(nm[-length(nm)], NA), las=2, tick=FALSE, ...)
+    axis(2, at=0:(p-1)/(p-1), labels=c(rev(labels[-1]), NA), las=2, tick=FALSE, ...)
+    axis(1, at=0:(p-1)/(p-1), labels=c(labels[-length(labels)], NA), las=2, tick=FALSE, ...)
     ol.x <- seq(par("usr")[1], par("usr")[2], length.out=p + 1)
     ol.y <- seq(par("usr")[3], par("usr")[4], length.out=p + 1)
     if (outline){

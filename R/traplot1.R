@@ -1,6 +1,9 @@
-traplot1 <- function(x, col=mcmcplotsPalette(nchains), lty=1, style=c("gray", "plain"), ...){
+traplot1 <- function(x, col=NULL, lty=1, style=c("gray", "plain"), ...){
     style <- match.arg(style)
     nchains <- nchain(x)
+    if (is.null(col)){
+        col <- mcmcplotsPalette(nchains)
+    }
     xx <- as.vector(time(x))
     yy <- do.call("cbind", as.list(x))
     if (style=="plain"){

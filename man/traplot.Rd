@@ -7,9 +7,11 @@
 }
 
 \usage{
-traplot(mcmcout, parms = NULL, regex = NULL, random = NULL, ylim = NULL,
-auto.layout = TRUE, mar=c(2.0, 2.0, 1.5, 0.25)+0.1, col =
-mcmcplotsPalette(nchains), lty = 1, main = NULL, style = c("gray", "plain"), \dots)
+traplot(mcmcout, parms = NULL, regex = NULL, random = NULL,
+leaf.marker="[\\\\[_]", ylim = NULL, auto.layout = TRUE,
+mar = c(2.0, 2.0, 1.5, 0.25) + 0.1, col =
+NULL, lty = 1, plot.title = NULL, main = NULL,
+greek = FALSE, style = c("gray", "plain"), \dots)
 }
 
 \arguments{
@@ -17,36 +19,27 @@ mcmcplotsPalette(nchains), lty = 1, main = NULL, style = c("gray", "plain"), \do
   \item{parms}{ character vector specifying which subsets of parameters to plot.  If \code{NULL}, \code{mcmcplot} will plot all parameters. Regular expressions are used to strip all numbers and punctuation out of the parameter names to find the parameters that match the character strings in \code{parms}.}
   \item{regex}{ character vector of regular expressions denoting groups of parameters to plot.}
   \item{random}{ an integer indicating the maximum number of parameters to randomly select for plotting from each group of parameters as specified by the \code{parms} argument. }
+  \item{leaf.marker}{ a regular expression with a character class that marks the beginning of the ``leaf'' portion of a parameter name.  The default character class includes \code{[} and \code{_}}
   \item{ylim}{ limits for the y-axis.}
   \item{auto.layout}{automatically creates a plot layout using \code{mult.fig} if \code{TRUE}.}
   \item{mar}{ argument passed to \code{multi.fig} if \code{auto.layout=TRUE}}
-  \item{col}{colors to be used in plotting the densities.}
+  \item{col}{colors to be used in plotting the densities.  Default is \code{mcmcplotsPalette(nchains)}.}
   \item{lty}{line types to be used in plotting.}
+  \item{plot.title}{ title to put in the outer margin.  Default is no title.}
   \item{main}{ main title for the plots. Default is to use parameter names.}
+  \item{greek}{ if \code{TRUE}, the names of greek letters in the \code{labels} will be displayed as greek characters on the plot.}
   \item{style}{ if "gray", then the plotting region is printed with a gray background, otherwise the default plotting region is used.}
   \item{\ldots}{ further arguments passed to the plotting function. }
-}
-
-\details{
-  None.
 }
 
 \value{
   Creates a plot.
 }
 
-\references{
-  None.
-}
-
 \author{ S. McKay Curtis }
 
-\note{
-  None.
-}
-
 \seealso{
-  \code{\link{denplot}}
+  \code{\link{denplot}}, \code{\link{parms2plot}}
 }
 
 \examples{
@@ -59,7 +52,11 @@ fakemcmc <- as.mcmc.list(lapply(1:3, function(i) mcmc(matrix(rnorm(nc*nr, rep(me
 ## Plot traces of the fake MCMC output
 traplot(fakemcmc)
 traplot(fakemcmc, style="plain")
-traplot(fakemcmc, "gamma")
+traplot(fakemcmc, "gamma", greek=TRUE)
+
+## What happens with NULL varnames?
+varnames(fakemcmc) <- NULL
+traplot(fakemcmc)
 
 \dontrun{
 ## traplot works on bugs objects too

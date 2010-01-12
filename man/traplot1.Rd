@@ -10,37 +10,29 @@
 }
 
 \usage{
-traplot1(x, col = mcmcplotsPalette(nchains), lty = 1, style = c("gray", "plain"), \dots)
+traplot1(x, col = NULL, lty = 1, style = c("gray", "plain"), \dots)
 }
 
 \arguments{
   \item{x}{an \code{mcmc.list} object with a single variable.}
-  \item{col}{ one or more colors for the trace lines.}
+  \item{col}{ one or more colors for the trace lines.  Default is \code{mcmcplotsPalette(nchains)}.}
   \item{lty}{ one or more line types for the trace lines.}
   \item{style}{ if "gray", then the plotting region is printed with a gray background, otherwise the default plotting region is used.}
   \item{\dots}{ further arguments passed to the plotting function.}
 }
-\details{
-  None.
-}
+
 \value{
   Creates a plot.
 }
-\references{
-  None.
-}
+
 \author{
   S. McKay Curtis
 }
-\note{
-  None.
-}
-
-%% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
-  \code{\link{mcmcplot}}, \code{\link{denoverplot1}}, \code{\link{autplot1}}
+  \code{\link{mcmcplot1}}, \code{\link{denoverplot1}}, \code{\link{autplot1}}
 }
+
 \examples{
 ## Create fake MCMC output
 nc <- 10; nr <- 1000
