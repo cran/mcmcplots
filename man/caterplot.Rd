@@ -8,7 +8,7 @@
 }
 
 \usage{
-caterplot(mcmcout, parms = NULL, regex = NULL, random = NULL, quantiles = list(), collapse = TRUE, plot.labels = "axis", cex.labels = NULL, xlim = NULL, lwd = c(1, 2), col = mcmcplotsPalette(nchains), style=c("gray", "plain"), \dots)
+caterplot(mcmcout, parms = NULL, regex = NULL, random = NULL, quantiles = list(), collapse = TRUE, labels = NULL, labels.loc = "axis", cex.labels = NULL, horizontal=TRUE, val.lim = NULL, lab.lim = NULL, lwd = c(1, 2), pch = 19, col = mcmcplotsPalette(nchains), style=c("gray", "plain"), \dots)
 }
 
 \arguments{
@@ -18,11 +18,15 @@ caterplot(mcmcout, parms = NULL, regex = NULL, random = NULL, quantiles = list()
   \item{random}{ integer specifying how many parameters from each group will be randomly selected for plotting.  This argument is useful when \code{mcmcout} has a large number of parameters (e.g., from a hierarchical model).  If \code{NULL}, all parameters will be plotted.}
   \item{quantiles}{ list with two elements \code{outer} and \code{inner}. The \code{outer} element of the list should contain the quantiles of the posterior draws that will be plotted as the longer, thinner line.  The \code{inner} element of the list should contain the quantiles of posterior draws that will be plotted as the shorter, thicker line.  If missing, the default is to use \code{list(outer=c(0.025,0.975),inner=c(0.16,0.84))}, which corresponds to 95\% and 68\% credible intervals.}
   \item{collapse}{ if \code{TRUE}, all parallel chains are collapsed into one chain before plotting. If \code{FALSE}, parallel chains are plotted nearly on top of each other with colors as specified in \code{col}.}
-  \item{plot.labels}{ if 'axis,' then parameter labels (the names of the parameters) will be plotted on the axis.  If 'above,' then variable names will be plotted above the means for each 'caterplot.' If any other value, no names will be plotted.}
+  \item{labels}{ labels for the individual "caterpillars."  If \code{NULL}, parameter names in \code{mcmcout} are used.}
+  \item{labels.loc}{ if 'axis,' then parameter labels (the names of the parameters) will be plotted on the axis.  If 'above,' then variable names will be plotted above the means for each 'caterplot.' If any other value, no names will be plotted.}
   \item{cex.labels}{ character expansion factor for the plot labels.  If names of parameters will not be plotted, this argument is ignored.}
-  \item{xlim}{ a vector containing the upper and lower limits for the x axis.  If \code{NULL}, the minimum and maximum values found by \code{outer} quantiles are used.}
+  \item{horizontal}{ logical indicating whether intervals should be plotted parallel to the x-axis (so \emph{horizontal} lines) or parallel to the y axis.}
+  \item{val.lim}{ a vector containing the upper and lower limits for the "value" axis (which is the x axis if \code{horizontal=TRUE}).  If \code{NULL}, the minimum and maximum values found by \code{outer} quantiles are used.}
+  \item{lab.lim}{ a vector containing the upper and lower limits for the "label" axis (which is the y axis if \code{horizontal=TRUE}).  If \code{NULL}, limits are automatically selected to contain all the labels of the plotted intervals.}
   \item{col}{ a single value or a vector of values specifying the colors to be used in plotting.}
   \item{lwd}{ a vector of length 2 of line weights used for plotting the inner and outer caterpillars.}
+  \item{pch}{ plot character to use in plotting the medians of the intervals.}
   \item{style}{ if "gray", then the plotting region is printed with a gray background, otherwise the default plotting region is used.}
   \item{\ldots}{ further arguments passed to the plotting function.}
 }
@@ -64,13 +68,17 @@ fakemcmc <- as.mcmc.list(lapply(1:3, function(i) mcmc(matrix(rnorm(nc*nr, rep(me
 par(mfrow=c(2,2))
 caterplot(fakemcmc, "alpha", collapse=FALSE)
 caterplot(fakemcmc, "gamma", collapse=FALSE)
-caterplot(fakemcmc, "alpha", plot.labels="axis", col="blue")
-caterplot(fakemcmc, "gamma", plot.labels="above", col="red")
+caterplot(fakemcmc, "alpha", labels.loc="axis", col="blue")
+caterplot(fakemcmc, "gamma", labels.loc="above", col="red")
 
 caterplot(fakemcmc, "alpha", collapse=FALSE, style="plain")
 caterplot(fakemcmc, "gamma", collapse=FALSE, style="plain")
-caterplot(fakemcmc, "alpha", plot.labels="axis")
-caterplot(fakemcmc, "gamma", plot.labels="above")
+caterplot(fakemcmc, "alpha", labels.loc="axis")
+caterplot(fakemcmc, "gamma", labels.loc="above")
+
+caterplot(fakemcmc, "alpha", horizontal=FALSE)
+caterplot(fakemcmc, horizontal=FALSE)
+caterpoints(rnorm(10, 21, 2), horizontal=FALSE, pch="x", col="red")
 
 \dontrun{
 ## caterplot works on bugs objects too

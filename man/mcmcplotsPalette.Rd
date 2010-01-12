@@ -6,10 +6,11 @@
   This function uses the \pkg{colorspace} package to create a color palette for the functions in the \pkg{mcmcplots} package.
 }
 
-\usage{mcmcplotsPalette(n)}
+\usage{mcmcplotsPalette(n, seq = FALSE)}
 
 \arguments{
   \item{n}{number of colors}
+  \item{seq}{logical indicating whether to use "sequential" colors rather than "rainbow" colors}
 }
 
 \value{
@@ -29,7 +30,7 @@
 }
 
 \seealso{
-  \code{rainbow_hcl}
+  \code{rainbow_hcl}, \code{sequential_hcl}
 }
 
 \examples{

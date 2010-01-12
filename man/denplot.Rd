@@ -8,7 +8,7 @@
 }
 
 \usage{
-denplot(mcmcout, parms = NULL, regex = NULL, random = NULL, xlim = NULL, ylim = NULL, auto.layout = TRUE, mar=c(2.0, 2.0, 1.5, 0.25)+0.1, col = mcmcplotsPalette(nchains), lty = 1, xlab = "", ylab = "", main = NULL, collapse=FALSE, style=c("gray", "plain"), \dots)
+denplot(mcmcout, parms = NULL, regex = NULL, random = NULL, xlim = NULL, ylim = NULL, auto.layout = TRUE, mar=c(2.0, 2.0, 1.5, 0.25)+0.1, col = mcmcplotsPalette(nchains), lty = 1, xlab = "", ylab = "", plot.title=NULL, main = NULL, collapse=FALSE, style=c("gray", "plain"), \dots)
 }
 
 \arguments{
@@ -24,7 +24,8 @@ denplot(mcmcout, parms = NULL, regex = NULL, random = NULL, xlim = NULL, ylim = 
   \item{lty}{ line types to be used in plotting.}
   \item{xlab}{ label for the x-axis.}
   \item{ylab}{ label for the y-axis.}
-  \item{main}{ title for the outer margin of the plot. Default is no title.}
+  \item{plot.title}{ title to put in the outer margin.  Default is no title.}
+  \item{main}{ character vector of titles for each individual plot.  If \code{NULL}, then the names of the parameters are used.}
   \item{collapse}{ if \code{TRUE}, all parallel chains are collapsed into one chain before plotting. If \code{FALSE}, parallel chains are plotted with colors as specified in \code{col}.}
   \item{style}{ if "gray", then the plotting region is printed with a gray background, otherwise the default plotting region is used.}
   \item{\ldots}{ further arguments to be passed to the plotting function.}

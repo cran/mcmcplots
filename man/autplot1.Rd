@@ -4,15 +4,16 @@
   Autocorrelation Plot of MCMC Output
 }
 \description{
-  Creates an autocorrelation plot of MCMC output.  The code for \code{autplot1} is modified from the \code{autocorr.plot} function in the \pkg{coda} package.
+  Creates an autocorrelation or partial autocorrelation plot of MCMC output.  The code for \code{autplot1} is modified from the \code{autocorr.plot} function in the \pkg{coda} package.
 }
 \usage{
-autplot1(x, chain = 1, lag.max = NULL, col = mcmcplotsPalette(1), style = c("gray", "plain"), \dots)
+autplot1(x, chain = 1, lag.max = NULL, partial = FALSE, col = mcmcplotsPalette(1), style = c("gray", "plain"), \dots)
 }
 \arguments{
   \item{x}{an \code{mcmc.list} object with a single variable.}
   \item{chain}{the number of the parallel chain for plotting.  The default is to use the first parallel chain.}
-  \item{lag.max}{passed as an argument to the autocorrelation function \code{acf}}
+  \item{lag.max}{passed as an argument to the autocorrelation function \code{acf}.}
+  \item{partial}{logical indicating whether paritial autocorrelation should be plotted.}
   \item{col}{color of the bars in the plot.}
   \item{style}{ if "gray", then the plotting region is printed with a gray background, otherwise the default plotting region is used.}
   \item{\dots}{ further arguments passed to the plotting function.}

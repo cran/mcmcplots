@@ -7,7 +7,7 @@
 }
 
 \usage{
-denoverplot(mcmc1, mcmc2, parms = NULL, regex = NULL, random = NULL, auto.layout = TRUE, legend = TRUE, mar = c(2.0, 2.0, 1.5, 0.25)+0.1, col = mcmcplotsPalette(2), lty = 1, main = NULL, style = c("gray", "plain"), \dots)
+denoverplot(mcmc1, mcmc2, parms = NULL, regex = NULL, random = NULL, auto.layout = TRUE, legend = TRUE, mar = c(2.0, 2.0, 1.5, 0.25)+0.1, col = mcmcplotsPalette(2), lty = 1, plot.title = NULL, main = NULL, style = c("gray", "plain"), \dots)
 }
 
 \arguments{
@@ -21,7 +21,8 @@ denoverplot(mcmc1, mcmc2, parms = NULL, regex = NULL, random = NULL, auto.layout
   \item{mar}{ argument passed to \code{multi.fig} if \code{auto.layout=TRUE}}
   \item{col}{ colors for plotting the densites. }
   \item{lty}{ line types for plotting densities.  Argument is recylced to be of length 2.}
-  \item{main}{ title to put in the outer margin.  Default is no title.}
+  \item{main}{ character vector of titles to put over each individual plot.  If \code{NULL}, then the names of the parameters are used.}
+  \item{plot.title}{ title to put in the outer margin.  Default is no title.}
   \item{style}{ if "gray", then the plotting region is printed with a gray background, otherwise the default plotting region is used.}
   \item{\ldots}{ additional arguments passed to the \code{denoverplot} function.}
 }

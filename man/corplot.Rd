@@ -7,12 +7,15 @@
 }
 
 \usage{
-corplot(mat, col = gray(11:0/11), ...)
+corplot(mat, col = mcmcplotsPalette(11, TRUE), outline = TRUE, legend.scale = 0.75, mar=c(5, 4, 1, 1) + 0.1, \dots)
 }
 
 \arguments{
   \item{mat}{ correlation matrix.}
   \item{col}{ colors to be used in the plot.}
+  \item{outline}{ logical indicating whether outlines of image sqares should be drawn. }
+  \item{legend.scale}{ scales the height of the legend with respect to the height of the plot.  Default is 0.75 which makes the legend 3 quarters as tall as the plot.}
+  \item{mar}{ graphical parameter \code{mar}.  See documentation for \code{par}.}
   \item{\dots}{ further arguments passed to the plotting function. }
 }
 

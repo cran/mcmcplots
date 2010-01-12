@@ -1,0 +1,14 @@
+Changes to mcmcplots version 0.2
+* graypr: coloring and weights of gridlines modified slightly
+* autplot1: default coloring changed from black to mcmcplotsPalette(1)
+* mcmcplotsPalette: added arguemnt 'seq' to allow for corplot to use sequential_hcl as the default colors.
+* corplot: changed the default colors (see above)
+* mcmcplotsPalette: changed the default chroma value to be brighter (old=75 to new=100)
+* caterplot: argument 'horizontal' added to allow horizontal or vertical plotting of intervals.
+* caterpoints: argument 'horizontal' added to match caterpoints.
+* corplot: adds a legend by default
+* denplot: added 'plot.title' argument and 'main' argument for labeling of the whole plot and labeling of individual plots
+* corplot: added argument 'legend.scale' to allow user control over the size of the legend relative to the size of the rest of the plot
+* mcmcplot1: changed formatting of plot
+* autplot1: added 'partial' argument for the plotting of partial autocorrelation
+* caterplot: changed 'labels' argument to 'labels.loc' and let 'labels' argument be a character string of labels

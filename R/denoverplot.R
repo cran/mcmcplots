@@ -1,4 +1,4 @@
-denoverplot <- function(mcmc1, mcmc2, parms=NULL, regex=NULL, random=NULL, auto.layout=TRUE, legend=TRUE, mar=c(2.0, 2.0, 1.5, 0.25)+0.1, col=mcmcplotsPalette(2), lty=1, main=NULL, style=c("gray", "plain"), ...){
+denoverplot <- function(mcmc1, mcmc2, parms=NULL, regex=NULL, random=NULL, auto.layout=TRUE, legend=TRUE, mar=c(2.0, 2.0, 1.5, 0.25)+0.1, col=mcmcplotsPalette(2), lty=1, plot.title=NULL, main=NULL, style=c("gray", "plain"), ...){
     nm1 <- deparse(substitute(mcmc1))
     nm2 <- deparse(substitute(mcmc2))
 
@@ -24,9 +24,16 @@ denoverplot <- function(mcmc1, mcmc2, parms=NULL, regex=NULL, random=NULL, auto.
         on.exit(par(op))
     }
 
+    if (is.null(main)){
+        main <- parnames
+        names(parnames) <- main
+    }
+    main <- rep(main, length.out=length(parnames))
+    names(main) <- parnames
+
     for (p in parnames){
         denoverplot1(unlist(mcmc1[, p]), unlist(mcmc2[, p]), col=col, lty=lty, style=style, gpar=list(xlab="", ylab=""))
-        title(main=p)
+        title(main=main[p])
     }
 
     if (legend){

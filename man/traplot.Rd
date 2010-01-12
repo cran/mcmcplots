@@ -7,7 +7,9 @@
 }
 
 \usage{
-traplot(mcmcout, parms = NULL, regex = NULL, random = NULL, ylim = NULL, auto.layout = TRUE, mar=c(2.0, 2.0, 1.5, 0.25)+0.1, col = mcmcplotsPalette(nchains), lty = 1, main = NULL, \dots)
+traplot(mcmcout, parms = NULL, regex = NULL, random = NULL, ylim = NULL,
+auto.layout = TRUE, mar=c(2.0, 2.0, 1.5, 0.25)+0.1, col =
+mcmcplotsPalette(nchains), lty = 1, main = NULL, style = c("gray", "plain"), \dots)
 }
 
 \arguments{
@@ -21,6 +23,7 @@ traplot(mcmcout, parms = NULL, regex = NULL, random = NULL, ylim = NULL, auto.la
   \item{col}{colors to be used in plotting the densities.}
   \item{lty}{line types to be used in plotting.}
   \item{main}{ main title for the plots. Default is to use parameter names.}
+  \item{style}{ if "gray", then the plotting region is printed with a gray background, otherwise the default plotting region is used.}
   \item{\ldots}{ further arguments passed to the plotting function. }
 }
 

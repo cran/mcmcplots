@@ -1,4 +1,5 @@
-traplot <- function(mcmcout, parms=NULL, regex=NULL, random=NULL, ylim=NULL, auto.layout=TRUE, mar=c(2.0, 2.0, 1.5, 0.25)+0.1, col=mcmcplotsPalette(nchains), lty=1, main=NULL, ...){
+traplot <- function(mcmcout, parms=NULL, regex=NULL, random=NULL, ylim=NULL, auto.layout=TRUE, mar=c(2.0, 2.0, 1.5, 0.25) + 0.1, col=mcmcplotsPalette(nchains), lty=1, main=NULL, style=c("gray", "plain"), ...){
+    style <- match.arg(style)
     if (!(is.mcmc(mcmcout)|is.mcmc.list(mcmcout))) mcmcout <- as.mcmc(mcmcout)
     if (!is.mcmc.list(mcmcout)) mcmcout <- mcmc.list(mcmcout)
     nchains <- length(mcmcout)
@@ -11,7 +12,7 @@ traplot <- function(mcmcout, parms=NULL, regex=NULL, random=NULL, ylim=NULL, aut
         on.exit(par(op))
     }
     for (pmtr in parnames){
-        traplot1(mcmcout[, pmtr, drop=FALSE], col=col, lty=lty, ylim=ylim, main=pmtr, xlab="", ylab="", ...)
+        traplot1(mcmcout[, pmtr, drop=FALSE], col=col, lty=lty, ylim=ylim, main=pmtr, xlab="", ylab="", style=style, ...)
     }
     return(invisible(parnames))
 }

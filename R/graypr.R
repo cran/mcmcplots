@@ -4,14 +4,13 @@
     if (y.axis)
         axis(2, lwd=0, lwd.ticks=1)
     rect(par("usr")[1], par("usr")[3], par("usr")[2], par("usr")[4], border=NA, col=gray(0.85))
-    ##grid(col=gray(0.95), lty=1, lwd=1.1)
     x.ticks <- axTicks(1)
     y.ticks <- axTicks(2)
     if (x.major){
-        abline(v=x.ticks, col=gray(0.95), lty=x.malty)
+        abline(v=x.ticks, col=gray(0.90), lty=x.malty, lwd=2)
     }
     if (y.major){
-        abline(h=y.ticks, col=gray(0.95), lty=y.malty)
+        abline(h=y.ticks, col=gray(0.90), lty=y.malty, lwd=2)
     }
     if (x.minor){
         x.sep <- diff(x.ticks)[1]/2

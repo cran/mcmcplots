@@ -1,4 +1,4 @@
-caterplot <- function (mcmcout, parms=NULL, regex=NULL, random=NULL, quantiles=list(), collapse=TRUE, plot.labels="axis", cex.labels=NULL, xlim=NULL, lwd=c(1, 2), col=mcmcplotsPalette(nchains), style=c("gray", "plain"), ...){
+caterplot <- function (mcmcout, parms=NULL, regex=NULL, random=NULL, quantiles=list(), collapse=TRUE, labels=NULL, labels.loc="axis", cex.labels=NULL, horizontal=TRUE, val.lim=NULL, lab.lim=NULL, lwd=c(1, 2), pch=19, col=mcmcplotsPalette(nchains), style=c("gray", "plain"), ...){
 
     ## Utility functions ##
     is.odd <- function(x) return(x %% 2 != 0)
@@ -39,32 +39,90 @@ caterplot <- function (mcmcout, parms=NULL, regex=NULL, random=NULL, quantiles=l
     mn   <- lapply(mcmcout, colMeans)
     med  <- lapply(mcmcout, function(mat) apply(mat, 2, median))
 
-    if (is.null(xlim))
-        x.lim <- range(unlist(qout))
-    else
-        x.lim <- xlim
+    if (is.null(val.lim))
+        val.lim <- range(unlist(qout))
+    if (is.null(lab.lim))
+        lab.lim <- c(0, np + 1)
+
+    if (horizontal){
+        xlim <- val.lim
+        ylim <- lab.lim
+
+        y.axis <- FALSE
+        y.major <- FALSE
+        y.minor <- FALSE
+
+        x.axis <- TRUE
+        x.major <- TRUE
+        x.minor <- FALSE
+
+        xaxt <- NULL
+        yaxt <- "n"
+
+        axis.side <- 2
+        las <- 1
+
+        vv <- rev(seq(np))
+    }
+    else{
+        ylim <- val.lim
+        xlim <- lab.lim
+
+        y.axis <- TRUE
+        y.major <- TRUE
+        y.minor <- FALSE
+
+        x.axis <- FALSE
+        x.major <- FALSE
+        x.minor <- FALSE
+
+        xaxt <- "n"
+        yaxt <- NULL
+
+        axis.side <- 1
+        las <- 2
+
+        vv <- seq(np)
+    }
     if(style=="gray"){
-        plot(0, 0, ylim = c(0, np + 1), xlim=x.lim, type="n", ann=FALSE, xaxt="n", yaxt="n", bty="n", ...)
-        .graypr(y.axis=FALSE, y.major=FALSE, x.minor=FALSE, y.minor=FALSE)
-        abline(h=1:np, col=gray(0.95), lty=3)
+        plot(0, 0, ylim = ylim, xlim=xlim, type="n", ann=FALSE, xaxt="n", yaxt="n", bty="n", ...)
+        .graypr(x.axis=x.axis, x.major=x.major, x.minor=x.minor, y.axis=y.axis, y.major=y.major, y.minor=y.minor)
+        if (horizontal) abline(h=1:np, col=gray(0.95), lty=3)
+        else abline(v=1:np, col=gray(0.95), lty=3)
     }
     if (style=="plain"){
-        plot(0, 0, ylim = c(0, np + 1), xlim=x.lim, type="n", ann=FALSE, yaxt="n", ...)
+        plot(0, 0, ylim=ylim, xlim=xlim, type="n", ann=FALSE, yaxt=yaxt, xaxt=xaxt, ...)
     }
-    yy <- rev(seq(np))
     lwd <- rep(lwd, length=2)
-    for (i in seq(nchains)){
-        yyoff <- yy + get.offset(i, nchains)
-        matlines(qout[[i]], rbind(yyoff, yyoff), col=col[i], lwd=lwd[1], lty=1)
-        matlines(qin[[i]], rbind(yyoff, yyoff), col=col[i], lwd=lwd[2], lty=1)
-        points(med[[i]], yyoff, pch=19, col=col[i])
+    if (horizontal){
+        for (i in seq(nchains)){
+            vvoff <- vv + get.offset(i, nchains)
+            matlines(qout[[i]], rbind(vvoff, vvoff), col=col[i], lwd=lwd[1], lty=1)
+            matlines(qin[[i]], rbind(vvoff, vvoff), col=col[i], lwd=lwd[2], lty=1)
+            points(med[[i]], vvoff, pch=pch, col=col[i])
+        }
     }
+    else{
+        for (i in seq(nchains)){
+            vvoff <- vv + get.offset(i, nchains)
+            matlines(rbind(vvoff, vvoff), qout[[i]], col=col[i], lwd=lwd[1], lty=1)
+            matlines(rbind(vvoff, vvoff), qin[[i]], col=col[i], lwd=lwd[2], lty=1)
+            points(vvoff, med[[i]], pch=pch, col=col[i])
+
+        }
+    }
+    if (is.null(labels))
+        labels <- parnames
     if (is.null(cex.labels))
         cex.labels <- 1/(log(np)/5 + 1)
-    if (plot.labels=="axis")
-        axis(2, at=yy, labels=parnames, tick=F, las=1, cex.axis=cex.labels)
-    if (plot.labels=="above")
-        text(med[[1]], yy, pos=3, labels=parnames, cex=cex.labels)
+    if (labels.loc=="axis")
+        axis(axis.side, at=vv, labels=labels, tick=F, las=las, cex.axis=cex.labels)
+    if (labels.loc=="above"){
+        if (horizontal)
+            text(med[[1]], vv, pos=3, labels=labels, cex=cex.labels)
+        else
+            text(vv, med[[1]], pos=3, labels=labels, cex=cex.labels)
+    }
 
     return(invisible(parnames))
 }
