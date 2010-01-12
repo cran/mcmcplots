@@ -1,9 +1,9 @@
 Package: mcmcplots
 Type: Package
 Title: Create Plots from MCMC Output
-Version: 0.4
+Version: 0.4.1
 Date: 2010-01-12
-Author@R: c( person("S. McKay", "Curtis", role=c("aut", "cre"),
+Authors@R: c( person("S. McKay", "Curtis", role=c("aut", "cre"),
         email="s.mckay.curtis@gmail.com"), person("Ilya", "Goldin",
         role="ctb") )
 Author: S. McKay Curtis with contributions from Ilya Goldin
@@ -15,6 +15,6 @@ Description: MCMC plots
 License: GPL (>= 2)
 LazyLoad: yes
 LazyData: yes
-Packaged: 2012-10-07 19:50:40 UTC; McKay
+Packaged: 2012-11-03 15:37:02 UTC; McKay
 Repository: CRAN
-Date/Publication: 2012-10-07 21:09:46
+Date/Publication: 2012-11-03 16:00:50
