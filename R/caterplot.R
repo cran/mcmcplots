@@ -1,4 +1,4 @@
-caterplot <- function (mcmcout, parms=NULL, regex=NULL, random=NULL, quantiles=list(), collapse=TRUE, labels=NULL, labels.loc="axis", cex.labels=NULL, horizontal=TRUE, val.lim=NULL, lab.lim=NULL, lwd=c(1, 2), pch=19, col=mcmcplotsPalette(nchains), style=c("gray", "plain"), ...){
+caterplot <- function (mcmcout, parms=NULL, regex=NULL, random=NULL, quantiles=list(), collapse=TRUE, denstrip = FALSE, add = FALSE, labels=NULL, labels.loc="axis", cex.labels=NULL, horizontal=TRUE, val.lim=NULL, lab.lim=NULL, lwd=c(1, 2), pch=3, width=NULL, col=mcmcplotsPalette(nchains), style=c("gray", "plain"), ...){
 
     ## Utility functions ##
     is.odd <- function(x) return(x %% 2 != 0)
@@ -38,9 +38,12 @@ caterplot <- function (mcmcout, parms=NULL, regex=NULL, random=NULL, quantiles=l
     qin  <- lapply(mcmcout, function(mat) apply(mat, 2, quantile, probs=q$inner))
     mn   <- lapply(mcmcout, colMeans)
     med  <- lapply(mcmcout, function(mat) apply(mat, 2, median))
+    dens <- lapply(mcmcout, function(mat) apply(mat, 2, density))
+    densx <- lapply(dens, function(dl) lapply(dl, function(x) x$x))
 
-    if (is.null(val.lim))
-        val.lim <- range(unlist(qout))
+    if (is.null(val.lim)){
+        val.lim <- if (denstrip) range(unlist(densx)) else range(unlist(qout))
+    }
     if (is.null(lab.lim))
         lab.lim <- c(0, np + 1)
 
@@ -84,31 +87,67 @@ caterplot <- function (mcmcout, parms=NULL, regex=NULL, random=NULL, quantiles=l
 
         vv <- seq(np)
     }
+
     if(style=="gray"){
-        plot(0, 0, ylim = ylim, xlim=xlim, type="n", ann=FALSE, xaxt="n", yaxt="n", bty="n", ...)
-        .graypr(x.axis=x.axis, x.major=x.major, x.minor=x.minor, y.axis=y.axis, y.major=y.major, y.minor=y.minor)
-        if (horizontal) abline(h=1:np, col=gray(0.95), lty=3)
-        else abline(v=1:np, col=gray(0.95), lty=3)
+        if (!add){
+            plot(0, 0, ylim = ylim, xlim=xlim, type="n", ann=FALSE, xaxt="n", yaxt="n", bty="n", ...)
+            .graypr(x.axis=x.axis, x.major=x.major, x.minor=x.minor, y.axis=y.axis, y.major=y.major, y.minor=y.minor)
+            if (horizontal){
+                abline(h=1:np, col=gray(0.95), lty=3)
+            } else {
+                abline(v=1:np, col=gray(0.95), lty=3)
+            }
+        }
+        colmin <- gray(0.85)
     }
     if (style=="plain"){
-        plot(0, 0, ylim=ylim, xlim=xlim, type="n", ann=FALSE, yaxt=yaxt, xaxt=xaxt, ...)
+        if (!add){
+            plot(0, 0, ylim=ylim, xlim=xlim, type="n", ann=FALSE, yaxt=yaxt, xaxt=xaxt, ...)
+        }
+        colmin <- "white"
     }
     lwd <- rep(lwd, length=2)
     if (horizontal){
-        for (i in seq(nchains)){
-            vvoff <- vv + get.offset(i, nchains)
-            matlines(qout[[i]], rbind(vvoff, vvoff), col=col[i], lwd=lwd[1], lty=1)
-            matlines(qin[[i]], rbind(vvoff, vvoff), col=col[i], lwd=lwd[2], lty=1)
-            points(med[[i]], vvoff, pch=pch, col=col[i])
+        if (denstrip){
+            if (is.null(width)){
+                if (nchains>1){
+                    width <- ifelse(is.odd(nchains), -get.offset(2, nchains), -2*get.offset(1, nchains))
+                } else {
+                    width <- diff(par("usr")[3:4])/30
+                }
+            }
+            for (i in seq(nchains)){
+                vvoff <- vv + get.offset(i, nchains)
+                invisible(mapply(function(d, a) denstrip(x=d$x, dens=d$y, at=a, width=width, colmin=colmin, colmax=col[i]), dens[[i]], vvoff))
+                points(med[[i]], vvoff, pch=pch, col=col[i])
+            }
+        } else {
+            for (i in seq(nchains)){
+                vvoff <- vv + get.offset(i, nchains)
+                matlines(qout[[i]], rbind(vvoff, vvoff), col=col[i], lwd=lwd[1], lty=1)
+                matlines(qin[[i]], rbind(vvoff, vvoff), col=col[i], lwd=lwd[2], lty=1)
+                points(med[[i]], vvoff, pch=pch, col=col[i])
+            }
         }
     }
     else{
-        for (i in seq(nchains)){
-            vvoff <- vv + get.offset(i, nchains)
-            matlines(rbind(vvoff, vvoff), qout[[i]], col=col[i], lwd=lwd[1], lty=1)
-            matlines(rbind(vvoff, vvoff), qin[[i]], col=col[i], lwd=lwd[2], lty=1)
-            points(vvoff, med[[i]], pch=pch, col=col[i])
-
+        if (denstrip){
+            if (is.null(width)){
+                if (nchains>1) width <- ifelse(is.odd(nchains), -get.offset(2, nchains), -2*get.offset(1, nchains))
+                else width <- diff(par("usr")[1:2])/30
+            }
+            for (i in seq(nchains)){
+                vvoff <- vv + get.offset(i, nchains)
+                invisible(mapply(function(d, a) denstrip(x=d$x, dens=d$y, at=a, horiz=FALSE, width=width, colmin=colmin, colmax=col[i]), dens[[i]], vvoff))
+                points(vvoff, med[[i]], pch=pch, col=col[i])
+            }
+        } else {
+            for (i in seq(nchains)){
+                vvoff <- vv + get.offset(i, nchains)
+                matlines(rbind(vvoff, vvoff), qout[[i]], col=col[i], lwd=lwd[1], lty=1)
+                matlines(rbind(vvoff, vvoff), qin[[i]], col=col[i], lwd=lwd[2], lty=1)
+                points(vvoff, med[[i]], pch=pch, col=col[i])
+            }
         }
     }
     if (is.null(labels))

@@ -1,12 +1,16 @@
 parms2plot <- function(parnames, parms, regex, random){
-    re.group <- "[]\\[(),[:digit:][:space:]]"
-    pargnames <- unique(gsub(re.group, "", parnames)) # unique parameter "groups"
+    re.leaf <- "[]\\[_(),[:digit:][:space:]]"
+    stems <- unique(gsub(re.leaf, "", parnames)) # unique parameter "groups"
     if (is.null(parms) && is.null(regex)){
-        re <- paste("^", pargnames, re.group, "*$", sep="")
+        ## Create a regular expression that selects all in 'parnames'.
+        re <- paste("^", stems, re.leaf, "*$", sep="")
     } else {
         if (!is.null(parms)){
-            parms <- gsub("(\\[|\\]|\\.|\\+|\\*|\\(|\\))", "\\\\\\1", parms) # add backslashes before
-            parms <- paste("^", parms, re.group, "*$", sep="")
+            ## 'parms' will eventually be used as a regular expression,
+            ## so all special characters currently in 'parms' need to
+            ## have backslashes added to them
+            parms <- gsub("(\\[|\\]|\\.|\\+|\\*|\\(|\\))", "\\\\\\1", parms)
+            parms <- paste("^", parms, re.leaf, "*$", sep="")
         }
         re <- c(parms, regex)
     }

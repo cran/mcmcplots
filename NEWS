@@ -1,3 +1,13 @@
+Changes to mcmcplots version 0.3
+* autplot1:
+  - now plots confidence intervals
+  - corrected broken compatibility with as.ts.mcmc in the coda package (thanks to Martyn Plummer for supplying a patch)
+* caterplot: added new arguments
+  - denstrip: plots density strips instead of quantile lines
+  - width: width of the density strips
+  - add: add to the existing plot instead of creating a new plot
+
+
 Changes to mcmcplots version 0.2
 * graypr: coloring and weights of gridlines modified slightly
 * autplot1: default coloring changed from black to mcmcplotsPalette(1)

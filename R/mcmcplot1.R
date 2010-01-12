@@ -1,9 +1,15 @@
 mcmcplot1 <- function(x, col=mcmcplotsPalette(n), lty=1, style=c("gray", "plain")){
     ## Convert input mcmcout to mcmc.list object
-    if (!(is.mcmc(x) | is.mcmc.list(x)))
-        x <- as.mcmc(x)
-    if (!is.mcmc.list(x))
+    ## if (!(is.mcmc(x) | is.mcmc.list(x)))
+    ##     x <- as.mcmc(x)
+    ## if (!is.mcmc.list(x))
+    ##     x <- mcmc.list(x)
+    if (!is.mcmc.list(x)){
+        if (!is.mcmc(x)){
+            x <- as.mcmc(x)
+        }
         x <- mcmc.list(x)
+    }
     style <- match.arg(style)
     n <- length(x)
     parname <- varnames(x)
