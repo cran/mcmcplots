@@ -1,16 +1,16 @@
-\name{traplot1}
-\alias{traplot1}
+\name{rmeanplot1}
+\alias{rmeanplot1}
 
 \title{
-  Trace Plot for a Single Parameter in MCMC Output
+  Running Mean Plot for a Single Parameter in MCMC Output
 }
 
 \description{
-  Creates a trace plot for one parameter in an MCMC simulation.  This function is called by the \code{mcmcplot} function, and is intended for internal use only.
+  Creates a trace plot of a running mean for one parameter in an MCMC simulation.  This function is called by the \code{mcmcplot} function, and is intended for internal use only.
 }
 
 \usage{
-traplot1(x, col = NULL, lty = 1, style = c("gray", "plain"), \dots)
+rmeanplot1(x, col = NULL, lty = 1, style = c("gray", "plain"), \dots)
 }
 
 \arguments{
@@ -30,7 +30,8 @@ traplot1(x, col = NULL, lty = 1, style = c("gray", "plain"), \dots)
 }
 
 \seealso{
-  \code{\link{mcmcplot1}}, \code{\link{denoverplot1}}, \code{\link{autplot1}}
+  \code{\link{mcmcplot1}}, \code{\link{denoverplot1}},
+  \code{\link{autplot1}}, \code{\link{traplot1}}
 }
 
 \examples{
@@ -43,8 +44,8 @@ fakemcmc <- coda::as.mcmc.list(
            function(i) coda::mcmc(matrix(rnorm(nc*nr, rep(means,each=nr)),
                                          nrow=nr, dimnames=list(NULL,pnames)))))
 
-traplot(fakemcmc[, "alpha[5]", drop=FALSE])
-traplot(fakemcmc[, "alpha[5]", drop=FALSE], style="plain")
+rmeanplot(fakemcmc[, "alpha[5]", drop=FALSE])
+rmeanplot(fakemcmc[, "alpha[5]", drop=FALSE], style="plain")
 }
 
 \keyword{ hplot }

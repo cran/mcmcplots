@@ -8,11 +8,12 @@
 }
 
 \usage{
-\method{as.mcmc}{bugs}(x)
+\method{as.mcmc}{bugs}(x, \dots)
 }
 
 \arguments{
   \item{x}{\code{bugs} object}
+  \item{\dots}{unused}
 }
 
 \value{
@@ -32,8 +33,8 @@
 outmcmc <- as.mcmc(schools.sim)
 
 ## Gelman Rubin diagnostics
-coda:::gelman.diag(outmcmc)
-coda:::mcmc.plot(outmcmc)
+:gelman.diag(outmcmc)
+:mcmc.plot(outmcmc)
 }
 }
 

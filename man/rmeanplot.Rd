@@ -1,17 +1,18 @@
-\name{traplot}
-\alias{traplot}
-\title{ Traceplots of Multiple Parameters. }
+\name{rmeanplot}
+\alias{rmeanplot}
 
-\description{
-  This function produces trace plots from an MCMC simulation on a single plot for all parameters (by default) or those parameters indicated by the \code{parms} argument.
+\title{
+  Running Mean Plots of Multiple Parameters
 }
-
+\description{
+  This function produces running mean plots from an MCMC simulation on a single plot for all parameters (by default) or those parameters indicated by the \code{parms} argument.
+}
 \usage{
-traplot(mcmcout, parms = NULL, regex = NULL, random = NULL,
-leaf.marker="[\\\\[_]", ylim = NULL, auto.layout = TRUE,
-mar = c(2.0, 2.0, 1.5, 0.25) + 0.1, col =
-NULL, lty = 1, plot.title = NULL, main = NULL,
-greek = FALSE, style = c("gray", "plain"), \dots)
+rmeanplot(mcmcout, parms = NULL, regex = NULL, random = NULL,
+leaf.marker = "[\\\\[_]", ylim = NULL, auto.layout = TRUE,
+mar = c(2, 2, 1.5, 0.25) + 0.1, col = NULL, lty = 1,
+plot.title = NULL, main = NULL, greek = FALSE,
+style = c("gray", "plain"), ...)
 }
 
 \arguments{
@@ -36,10 +37,8 @@ greek = FALSE, style = c("gray", "plain"), \dots)
   Creates a plot.
 }
 
-\author{ S. McKay Curtis }
-
-\seealso{
-  \code{\link{denplot}}, \code{\link{parms2plot}}
+\author{
+  Evangelos Evangelou
 }
 
 \examples{
@@ -53,26 +52,9 @@ fakemcmc <- coda::as.mcmc.list(
                                          nrow=nr, dimnames=list(NULL,pnames)))))
 
 ## Plot traces of the fake MCMC output
-traplot(fakemcmc)
-traplot(fakemcmc, style="plain")
-traplot(fakemcmc, "gamma", greek=TRUE)
-
-## What happens with NULL varnames?
-coda::varnames(fakemcmc) <- NULL
-traplot(fakemcmc)
-
-\dontrun{
-## traplot works on bugs objects too
-library(R2WinBUGS)
-example("openbugs", "R2WinBUGS")
-## from the help file for openbugs:
-schools.sim <- bugs(data, inits, parameters, model.file,
-                    n.chains = 3, n.iter = 5000,
-                    program = "openbugs", working.directory = NULL)
-traplot(schools.sim, "theta")
-}
-
+rmeanplot(fakemcmc)
+rmeanplot(fakemcmc, style="plain")
+rmeanplot(fakemcmc, "gamma", greek=TRUE)
 }
 
 \keyword{ hplot }
-
