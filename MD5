@@ -1,6 +1,6 @@
-2c209c5cf3a335d789dafb7000edbf28 *DESCRIPTION
-59802c76edb11ad4eab9f18916ca5b6b *NAMESPACE
-7091f8e39cff545c3bdd7293dd190e7e *NEWS
+d82385f808feafabda4059b14b4e55a7 *DESCRIPTION
+6a9854d05c521765b710c0953cf07b59 *NAMESPACE
+07a826420f219c2681b8d12a21e6fa97 *NEWS
 c1a6b7052f98c2323e812cc4075d8d06 *R/as.mcmc.bugs.R
 ee96d07cb74e6826a314838bc73cb5a1 *R/as.mcmc.rjags.R
 2d16d8f9612a57615ea47bfc05f89e60 *R/autplot1.R
@@ -42,7 +42,7 @@ abd9571fe8cf201c12e850d103093f2a *man/html.end.Rd
 c86ed085dd29c79e70b1f715fd581676 *man/html.img.Rd
 dc5910167ed562a5ffd499256d820c07 *man/mcmcplot.Rd
 d92cfc3b4d46429c6065d9d3906a3edb *man/mcmcplot1.Rd
-64f0af60bdf4cb6e9e151496cea2c0a6 *man/mcmcplots-package.Rd
+89d744f4f0f787314c8381ba95be4ddc *man/mcmcplots-package.Rd
 e6292ec6bcdf68b70987beeaa66fe063 *man/mcmcplotsPalette.Rd
 928ae420dae4c8430cfbb44048c679a1 *man/parcorplot.Rd
 9c9ec990ac8e5bf1970a09e97dafa482 *man/parms2plot.Rd
